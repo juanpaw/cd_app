@@ -1,0 +1,53 @@
+  	<label>Estudiantes</label>
+	<select class="form-control" id="estu" name="id_user">
+		<option>Seleccione estudiante</option>
+	</select><br>
+	<table class="table table-striped">
+	  <thead>
+	    <tr>
+	      <th>#</th>
+	      <th>Electiva</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  
+	  </tbody>
+	</table>	
+	<script>
+	
+		$.ajax({
+			url:host+'api/user/e',
+			success:function(data){				
+				for (var i = 0; i < data.length; i++) {['estu']
+
+					$('#estu').append("<option value='"+data[i]['id_user']+"'>"+data[i]['estu']+"</option>")
+					
+				}
+			}
+		});
+
+		$(document).on('change','#estu',function(){
+			var id_user=$(this).val();
+			$.ajax({
+				url:host+'api/electiva_usuario/eu/'+id_user,
+				success:function(data){
+
+					$('table').find('tbody').empty();	
+					for (var i = 0; i < data.length; i++) {
+
+						var myObj=data[i];
+						var arr = Object.keys(myObj).map(x => myObj[x]);
+						
+						var number=i+1;
+						$('table').find('tbody').append(`
+							<tr>
+								<td>`+number+`</td>
+								<td>`+arr[0]+`</td>
+							</tr>
+							`);
+					}
+					
+				}
+			});			
+		});
+	</script>

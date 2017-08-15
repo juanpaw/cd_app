@@ -1,0 +1,97 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fulltop fullwidth appnb">
+  <a class="navbar-brand" href="#">APP</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+ <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link home" href="#">Home<span class="sr-only">(current)</span></a>
+      </li>    
+      <li class="nav-item">
+        <a class="nav-link electivas" href="#">Electivas</a>
+      </li>            
+      <li class="nav-item">
+        <a class="nav-link elec_prof" href="#">Por profesor</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link elec_estu" href="#">Por estudiante</a>
+      </li>      
+    </ul>
+    <form class="form-inline my-2 my-lg-0">      
+      <button class="btn btn-outline-danger my-2 my-sm-0 puntero salir" type="button">Salir</button>
+    </form>
+  </div>
+<script>
+
+  $('.main-container').css({
+    'margin-top':$('.appnb').height(),        
+  }); 
+
+  $(document).on('click','.home',(function(event) {
+    $('.main-container').empty();
+  }));
+
+  $(document).on('click','.electivas',(function(event) {
+
+    $.ajax({
+      url: 'views/elec_upd.html',
+      type: 'POST'
+    })
+    .done(function(data) {        
+      
+      $('.main-container').html(data);
+      $("table").hide();
+      setTimeout(function(){       
+        $("table").find("tbody").find("tr").each(function(i,e) {
+            
+            $(this).find("td").eq(4).empty().html(`
+              <button type="button" class="btn btn-outline-info estu_insc">Inscribirme</button>
+              `);
+        });    
+        $("table").show();    
+      },1500);
+      
+    });
+    
+  }));  
+
+  $(document).on('click','.estu_insc',function(){
+    storage=Storages.localStorage;
+    var id_user=storage.get('logged');    
+    var id_elec=$(this).parent().parent().find('th').text();
+    $.ajax({
+      url:host+'api/electiva_usuario',
+      type:'POST',
+      data:'id_user='+id_user+'&id_electiva='+id_elec,
+      success:function(data){
+          if(data){
+            $('.modal-title').text('Exito');
+            $('.modal-body').html('<p>Se inscrito a la electiva</p>');
+            $('.modal').show();
+          }
+      }
+    });
+  });
+
+$(document).on('click','.elec_prof',function(){
+    $.ajax({
+      url: 'views/elec_prof.html',
+      type: 'POST'
+    })
+    .done(function(data) { 
+      $('.main-container').html(data);
+    });  
+});
+$(document).on('click','.elec_estu',function(){
+    $.ajax({
+      url: 'views/elec_estu.html',
+      type: 'POST'
+    })
+    .done(function(data) { 
+      $('.main-container').html(data);
+    });  
+});  
+  
+</script>  

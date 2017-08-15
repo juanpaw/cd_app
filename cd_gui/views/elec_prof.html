@@ -1,0 +1,51 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Electiva</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  </tbody>
+</table>
+<script>
+	
+  $.ajax({
+    url: 'views/combo_profes.html',
+    type: 'POST'
+  })
+  .done(function(data){
+    $('.main-container').prepend(data);
+  });
+
+  $(document).on('change','#profes',function(){
+      var id_prof=$(this).val();
+      $.ajax({
+        url:host+'api/profesor/l/'+id_prof,
+        type:'GET',        
+        success:function(data){
+          
+          var arr = $.parseJSON(data);    
+          var electivas=arr['electiva'];
+          $('table').find('tbody').empty();
+          for (var i = +0; i < electivas.length; i++) {
+            var num=i+1;
+            $('table').find('tbody').append(`
+                <tr><td>`+num+`</td><td>`+
+                electivas[i]
+                +`</td></tr>
+              `);
+            electivas[i]
+          }
+        	   /*
+            if(data){
+              $('.modal-title').text('Exito');
+              $('.modal-body').html('<p>Se inscrito a la electiva</p>');
+              $('.modal').show();
+            }
+            */
+        }
+      });
+  });
+</script>

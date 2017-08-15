@@ -1,0 +1,124 @@
+<div class="h"></div>
+<table class="table table-striped tb_elec_upd">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Electiva</th>
+      <th>Descripción</th>
+      <th>Profesor</th>
+      <th>Cupos</th>
+      <th>Accion</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  </tbody>
+</table>
+<div class="form">
+</div>
+<script>
+  $('.h').hide();
+	$.ajax({
+		url: host+'api/electiva',
+		type: 'GET'
+	})
+	.done(function(data) {		
+    
+    $('.h').text(data);
+    var arr = $.parseJSON(data);    
+		
+		for (var i = 0; i<arr.length; i++) {
+			$('.tb_elec_upd').find('tbody').append(`
+        <tr>
+          <th scope="row">`+arr[i]['id_electiva']+`</th>
+          <td>`+arr[i]['nombre']+`</td>
+          <td>`+arr[i]['descripcion']+`</td>
+          <td>`+arr[i]['profesor']+`</td>
+          <td>`+arr[i]['cupos']+`</td>
+          <td>
+          <button type="button" class="btn btn-outline-warning elec_edit" data-id=`+arr[i]['id_electiva']+`>EDITAR</button>
+          <button type="button" class="btn btn-outline-danger elec_erase" data-id=`+arr[i]['id_electiva']+`>BORRAR</button>          
+          </td>
+        </tr>
+        `);			
+		}
+    
+	});
+
+  $(document).on('click','.elec_edit',function(){
+
+    var data=$('.h').text();
+    var id=$(this).data('id');
+    var arr = $.parseJSON(data);
+    
+    for (var i = 0; i<arr.length; i++) {    
+      if(arr[i]['id_electiva']===id){        
+        
+        $.ajax({
+          url: 'views/elec_edit.html',
+          type: 'POST'          
+        })
+        .done(function(data){
+            //console.log("data", data);
+            $('.form').empty();
+            $(data).appendTo('.form');
+            $.ajax({
+              url: 'views/combo_profes.html',
+              type: 'POST'
+            })
+            .done(function(data){
+                //console.log("data", data);
+
+              $('.combo_profes').html(data);
+              
+            });   
+
+            
+            
+            $('#edit_elec').find("#elec_id").val(arr[i]['id_electiva']);
+            $('#edit_elec').find("#electiva").val(arr[i]['nombre']);
+            $('#edit_elec').find("#descripcion").val(arr[i]['descripcion']);
+            $('#edit_elec').find("#cupos").val(arr[i]['cupos']);            
+            
+        }); 
+        return;       
+      }
+
+    }
+
+    
+  });
+  $(document).on('click','.btn_edit_elec',function(){
+    
+    console.log("s", $('#profes').val());
+    console.log("f", $('form').serialize());
+    
+    $.ajax({
+      url: host+'api/electiva/'+$('#elec_id').val(),
+      type: 'PUT',
+      data:$('form').serialize(),
+      success:function(data){
+        $('.modal-title').text('Exito');
+        $('.modal-body').html('<p>Se ha actualizado la electiva</p>');
+        $('.modal').show();
+      }
+    })
+    .done(function(data) {  
+
+      console.log("data", data);      
+            
+    });     
+
+  });
+  $(document).on('click','.elec_erase',function(){
+
+    var id=$(this).data('id');
+    
+    $.ajax({
+      url: host+'api/electiva/'+id,
+      type: 'DELETE'      
+    });  
+    
+  });  
+
+</script>	

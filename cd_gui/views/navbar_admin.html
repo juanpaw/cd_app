@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fulltop fullwidth appnb">
+  <a class="navbar-brand" href="#">APP</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link home" href="#">Home<span class="sr-only">(current)</span></a>
+      </li>    
+      <li class="nav-item">
+        <a class="nav-link electivas" href="#">Electivas</a>
+      </li>      
+      <li class="nav-item">
+        <a class="nav-link users" href="#">Usuarios</a>
+      </li>        
+    </ul>
+    <form class="form-inline my-2 my-lg-0">      
+      <button class="btn btn-outline-danger my-2 my-sm-0 puntero salir" type="button">Salir</button>
+    </form>
+  </div>
+</nav>
+<script>
+  $(document).on('click','.home',(function(event) {
+    $('.main-container').empty();
+  }));
+
+	$(document).on('click','.electivas',(function(event) {
+
+		$.ajax({
+			url: 'views/electivas.html',
+			type: 'POST'
+		})
+		.done(function(data) {
+			
+			$('.main-container').html(data);
+			
+		});
+		  $('.main-container').css({
+    		'margin-top':$('.appnb').height(),        
+			}); 
+	}));	
+
+  $(document).on('click','.users',(function(event) {
+    $('.main-container').empty();
+    $.ajax({
+      url: 'views/usuarios.html',
+      type: 'POST',
+      success:function(data){
+        $('.main-container').html(data);
+      }
+    })    
+  }));
+</script>

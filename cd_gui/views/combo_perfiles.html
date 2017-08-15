@@ -1,0 +1,32 @@
+<div class="cpe">
+  	<label>Perfiles</label>
+	<select class="form-control" id="perfiles" name="id_perfil">
+		<option>Seleccione perfil</option>
+	</select><br>	
+</div>	
+<script>
+$(document).ready(function(){
+	$.ajax({
+		url: host+'api/perfiles',
+		type: 'GET',
+		success:function(data) {	
+	
+			var arr1 = $.map(data, function(value, index) {
+			    return [value];
+			});
+
+			for (var i = 0; i<arr1.length; i++){
+
+				var arr = $.map(arr1[i], function(value, index) {
+				    return [value];
+				});
+
+				$('#perfiles').prepend('<option value='+arr[0]+'>'+arr[1]+'</option>');
+				
+			}
+	    
+		}
+	});
+});	
+
+</script>

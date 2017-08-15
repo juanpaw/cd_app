@@ -1,0 +1,10 @@
+.fulltop{
+	position: absolute;
+	top:0;
+}
+.fullwidth{
+	width: 100%;
+}
+.puntero{
+	cursor: pointer;
+}

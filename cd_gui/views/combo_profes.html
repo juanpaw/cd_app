@@ -1,0 +1,37 @@
+
+<div class="cp">
+  	<label>Profesores</label>
+	<select class="form-control" id="profes" name="id_profesor">
+		<option>Seleccione profesor</option>
+	</select><br>	
+</div>	
+<script>
+$(document).ready(function(){
+	$.ajax({
+		url: host+'api/profesor',
+		type: 'GET',
+		success:function(data) {		
+			
+			for (var i = 0; i<data.length; i++) {
+				$('#profes').prepend('<option value='+data[i]['id_profesor']+'>'+data[i]['nombres']+' '+data[i]['apellidos']+'</option>');
+				
+			}
+			if($('.h').length>0){
+
+			    var arr = $.parseJSON($('.h').text());
+				var id=+$('#elec_id').val();
+				
+				for (var i = 0; i<arr.length; i++) {
+					
+			      if(arr[i]['id_electiva']===id){        
+			        $('#profes').val(arr[i]['id_profesor'])
+			   
+			        return;       
+			      }					
+				}
+			}
+		}
+	});
+});	
+
+</script>
